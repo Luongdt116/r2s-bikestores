@@ -53,6 +53,7 @@ public class DashboardUI {
 
     private void handleStaff() {
         System.out.println("\nNavigating to Staff Module...");
+        StaffApp.run();
     }
 
     private void handleStore() {
