@@ -138,6 +138,58 @@ public class StaffDAOImpl implements StaffDAO {
         }
     }
 
+    @Override
+    public Staff findById(int id) throws DAOException {
+        String sql = "select * from staffs where staff_id = ?";
+
+        try(PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1,id);
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                Staff staff = new Staff();
+                staff.setStaff_id(rs.getInt("staff_id"));
+                staff.setName(rs.getString("name"));
+                staff.setRole(rs.getString("role"));
+                staff.setEmail(rs.getString("email"));
+                staff.setPhone(rs.getString("phone"));
+                staff.setStore_id(rs.getInt("store_id"));
+
+                return staff;
+            }
+
+        }catch (SQLException e){
+            throw new DAOException("Failed to find Staff by ID.", e);
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<Staff> findByName(String name) throws DAOException {
+        String sql = "SELECT * FROM staffs WHERE name LIKE ?";
+        ArrayList<Staff> staffs = new ArrayList<>();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + name + "%");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Staff staff = new Staff();
+                staff.setStaff_id(rs.getInt("staff_id"));
+                staff.setName(rs.getString("name"));
+                staff.setRole(rs.getString("role"));
+                staff.setEmail(rs.getString("email"));
+                staff.setPhone(rs.getString("phone"));
+                staff.setStore_id(rs.getInt("store_id"));
+                staffs.add(staff);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Failed to find Staff by name.", e);
+        }
+
+        return staffs;
+    }
+
     private boolean checkStaffExists(int staffId) throws DAOException{
         String sql = "select count(*) from staffs where staff_id = ?";
 
@@ -156,17 +208,15 @@ public class StaffDAOImpl implements StaffDAO {
     private boolean checkStoreExists(int storeId) throws DAOException{
         String sql = "select count(*) from stores where store_id = ?";
 
-        try(PreparedStatement ps = conn.prepareStatement(sql)){
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, storeId);
-
             ResultSet rs = ps.executeQuery();
-            if(rs.next() && rs.getInt(1) == 0){
-                System.out.println("Store ID " + storeId + " does not exist.");
-                return false;
-            }
-        }catch (SQLException e) {
-            throw new DAOException("Failed to check Store ID", e);
+
+            if (rs.next()) return rs.getInt(1) > 0;
+        } catch (SQLException e) {
+            throw new DAOException("Failed to check Store ID.", e);
         }
+
         return false;
     }
 }

@@ -10,6 +10,8 @@ public interface StaffDAO {
     boolean insert(Staff staff) throws DAOException;
     boolean update(int id,Staff staff) throws DAOException;
     boolean delete(Staff staff) throws DAOException;
+    Staff findById(int id) throws DAOException;
+    ArrayList<Staff> findByName(String name) throws DAOException;
 
 
 

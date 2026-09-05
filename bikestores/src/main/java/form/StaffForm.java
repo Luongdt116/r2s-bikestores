@@ -9,6 +9,10 @@ public class StaffForm {
         return readPositiveInt("Enter staff ID: ");
     }
 
+    public static String getName() {
+        return ScannerUtil.readNonEmptyString("Enter staff name: ");
+    }
+
     public static Staff getStaff() {
         Staff staff = new Staff();
 

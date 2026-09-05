@@ -18,6 +18,8 @@ public class StaffApp {
     private static final int ADD_NEW_STAFF = 2;
     private static final int UPDATE_STAFF = 3;
     private static final int REMOVE_STAFF = 4;
+    private static final int FIND_STAFF_BY_ID = 5;
+    private static final int FIND_STAFF_BY_NAME = 6;
     private static final int BACK = 0;
 
     public static void run(){
@@ -44,6 +46,12 @@ public class StaffApp {
                         case REMOVE_STAFF:
                             deleteStaff(staffDAO);
                             break;
+                        case FIND_STAFF_BY_ID:
+                            findStaffById(staffDAO);
+                            break;
+                        case FIND_STAFF_BY_NAME:
+                            findStaffByName(staffDAO);
+                            break;
                         case BACK:
                             System.out.println("Back to menu.");
                             break;
@@ -66,6 +74,8 @@ public class StaffApp {
         System.out.println("2. Add new staff");
         System.out.println("3. Update staff");
         System.out.println("4. Delete staff");
+        System.out.println("5 Find staff by ID");
+        System.out.println("6 Find staff by name");
         System.out.println("0. Back to main menu");
     }
 
@@ -136,6 +146,31 @@ public class StaffApp {
             System.out.println("Staff deleted successfully.");
         } else {
             System.out.println("Staff was not found or delete failed.");
+        }
+    }
+
+    private static void findStaffById(StaffDAO staffDAO) throws DAOException {
+        int id = StaffForm.getId();
+        Staff staff = staffDAO.findById(id);
+
+        if (staff != null) {
+            System.out.println(staff);
+        } else {
+            System.out.println("Staff not found.");
+        }
+    }
+
+    private static void findStaffByName(StaffDAO staffDAO) throws DAOException {
+        String name = StaffForm.getName();
+        ArrayList<Staff> staffs = staffDAO.findByName(name);
+
+        if (staffs.isEmpty()) {
+            System.out.println("Staff not found.");
+            return;
+        }
+
+        for (Staff staff : staffs) {
+            System.out.println(staff);
         }
     }
 }
