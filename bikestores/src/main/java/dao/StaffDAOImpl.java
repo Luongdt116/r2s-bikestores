@@ -57,16 +57,16 @@ public class StaffDAOImpl implements StaffDAO {
 
         String sql = "insert into staffs (name, role, email, phone, store_id) values (?,?,?,?,?)";
 
-        try(PreparedStatement stmt = conn.prepareStatement(sql)){
+        try(PreparedStatement ps = conn.prepareStatement(sql)){
             int index = 1;
 
-            stmt.setString(index++, staff.getName());
-            stmt.setString(index++, staff.getRole());
-            stmt.setString(index++, staff.getEmail());
-            stmt.setString(index++, staff.getPhone());
-            stmt.setInt(index, staff.getStore_id());
+            ps.setString(index++, staff.getName());
+            ps.setString(index++, staff.getRole());
+            ps.setString(index++, staff.getEmail());
+            ps.setString(index++, staff.getPhone());
+            ps.setInt(index, staff.getStore_id());
 
-            int affectedRows = stmt.executeUpdate();
+            int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
             throw new DAOException("Failed to insert staff ", e);
@@ -130,7 +130,6 @@ public class StaffDAOImpl implements StaffDAO {
             ps.setInt(1, staffId);
 
             int affectedRows = ps.executeUpdate();
-
             return affectedRows > 0;
 
         }catch (SQLException e){

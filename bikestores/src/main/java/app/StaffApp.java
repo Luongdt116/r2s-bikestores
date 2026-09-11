@@ -86,42 +86,18 @@ public class StaffApp {
             System.out.println("No staff found");
             return;
         }
-        System.out.println(
-                "\n================ STAFF LIST ================"
-        );
-        System.out.printf(
-                "%-10s %-20s %-15s %-25s %-15s %-10s%n",
-                "ID",
-                "Name",
-                "Role",
-                "Email",
-                "Phone",
-                "Store ID"
-        );
-
         for (Staff staff : staffList) {
-            System.out.printf(
-                    "%-10d %-20s %-15s %-25s %-15s %-10d%n",
-                    staff.getStaff_id(),
-                    staff.getName(),
-                    staff.getRole(),
-                    staff.getEmail(),
-                    staff.getPhone(),
-                    staff.getStore_id()
-            );
+            System.out.println(staff);
         }
     }
-
 
     private static void addStaff(StaffDAO staffDAO) throws DAOException{
         Staff newStaff = StaffForm.getStaff();
 
         if (staffDAO.insert(newStaff)) {
-            System.out.println("Staff added successfully."
-            );
+            System.out.println("Staff added successfully.");
         } else {
-            System.out.println("Failed to add staff."
-            );
+            System.out.println("Failed to add staff.");
         }
 
     }
