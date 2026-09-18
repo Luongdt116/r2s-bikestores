@@ -1,10 +1,17 @@
 package util;
 
+import exception.DAOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class ScannerUtil {
 
     private static final Scanner scanner = new Scanner(System.in);
+
+    private ScannerUtil(){}
 
     public static int readInt(String message) {
         while (true) {
@@ -72,6 +79,39 @@ public class ScannerUtil {
                 return input;
             }
             System.out.println("Invalid email.");
+        }
+    }
+
+    public static boolean checkRecordExists(Connection conn, String tableName, String columnName, int id) throws DAOException{
+        String sql = "select count(*) from " + tableName + " where " + columnName + " = ?";
+
+        try(PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, id);
+            try(ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }catch (SQLException e) {
+            throw new DAOException("Failed to check " + columnName + " in table " + tableName, e);
+        }
+        return false;
+    }
+
+    public static double readPositiveDouble(String message) {
+        while (true) {
+            System.out.print(message);
+            try {
+                double value = Double.parseDouble(scanner.nextLine().trim());
+
+                if (value > 0) {
+                    return value;
+                }
+
+                System.out.println("Price must be greater than 0.");
+            } catch (NumberFormatException e) {
+                System.out.println(" Invalid number. Please enter a valid decimal value (e.g., 15.99).");
+            }
         }
     }
 }

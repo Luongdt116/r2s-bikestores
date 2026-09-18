@@ -6,6 +6,8 @@ import exception.DAOException;
 import java.sql.*;
 import java.util.ArrayList;
 
+import static util.ScannerUtil.*;
+
 public class StaffDAOImpl implements StaffDAO {
     private final Connection conn;
 
@@ -49,8 +51,10 @@ public class StaffDAOImpl implements StaffDAO {
             return false;
         }
 
-        if (!checkStoreExists(staff.getStore_id())) {
-            System.out.println("Store ID " + staff.getStore_id() + " does not exist.");
+        int Store_id = staff.getStore_id();
+        boolean isStoreValid = checkRecordExists(conn, "stores", "store_id", Store_id);
+        if (!isStoreValid) {
+            System.out.println("Store ID " + Store_id + " does not exist.");
 
             return false;
         }
@@ -79,14 +83,17 @@ public class StaffDAOImpl implements StaffDAO {
             return false;
         }
 
-        if (!checkStaffExists(id)) {
+        boolean isStaffValid = checkRecordExists(conn, "staffs", "staff_id", id);
+        if (!isStaffValid) {
             System.out.println("Staff ID " + id + " does not exist.");
 
             return false;
         }
 
-        if (!checkStoreExists(staff.getStore_id())) {
-            System.out.println("Store ID " + staff.getStore_id() + " does not exist.");
+        int Store_id = staff.getStore_id();
+        boolean isStoreValid = checkRecordExists(conn, "stores", "store_id", Store_id);
+        if (!isStoreValid) {
+            System.out.println("Store ID " + Store_id + " does not exist.");
 
             return false;
         }
@@ -119,7 +126,8 @@ public class StaffDAOImpl implements StaffDAO {
 
         int staffId = staff.getStaff_id();
 
-        if (!checkStaffExists(staffId)) {
+        boolean isStaffValid = checkRecordExists(conn, "staffs", "staff_id", staffId);
+        if (!isStaffValid) {
             System.out.println("Staff ID " + staffId + " does not exist.");
 
             return false;
@@ -189,35 +197,6 @@ public class StaffDAOImpl implements StaffDAO {
         return staffs;
     }
 
-    private boolean checkStaffExists(int staffId) throws DAOException{
-        String sql = "select count(*) from staffs where staff_id = ?";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, staffId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) return rs.getInt(1) > 0;
-        } catch (SQLException e) {
-            throw new DAOException("Failed to check Staff ID.", e);
-        }
-
-        return false;
-    }
-
-    private boolean checkStoreExists(int storeId) throws DAOException{
-        String sql = "select count(*) from stores where store_id = ?";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, storeId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) return rs.getInt(1) > 0;
-        } catch (SQLException e) {
-            throw new DAOException("Failed to check Store ID.", e);
-        }
-
-        return false;
-    }
 }
 
 
