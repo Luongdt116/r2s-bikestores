@@ -1,5 +1,7 @@
 package app;
 
+import entity.Store;
+
 import static util.ScannerUtil.readInt;
 
 public class DashboardUI {
@@ -58,6 +60,7 @@ public class DashboardUI {
 
     private void handleStore() {
         System.out.println("\nNavigating to Store Module...");
+        StoreApp.run();
     }
 
     private void handleCustomerCategory() {
@@ -70,6 +73,7 @@ public class DashboardUI {
 
     private void handleProductStock() {
         System.out.println("\nNavigating to Product & Stock Module...");
+        ProductsApp.run();
     }
 
     private void handleReports() {
